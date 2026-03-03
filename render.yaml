@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: sling402
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    plan: starter
+    envVars:
+      - key: PORT
+        value: "3000"
+      - key: PUBLIC_URL
+        value: "https://sling402.io"
+      - key: DATA_DIR
+        value: "/data"
+      - key: RUST_LOG
+        value: "error"
+    disk:
+      name: sling402-data
+      mountPath: /data
+      sizeGB: 1

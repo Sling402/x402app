@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Sling402 — $S402</title>
+<meta name="description" content="X402 Payment Protocol. Private instant transfers on Solana.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sling402.io">
+<meta property="og:site_name" content="Sling402">
+<meta property="og:title" content="Sling402 — X402 Payment Protocol">
+<meta property="og:description" content="Private instant transfers. X402 payment headers on Solana.">
+<meta property="og:image" content="https://sling402.io/og-banner.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Sling402">
+<meta name="twitter:title" content="Sling402 — X402 Payment Protocol">
+<meta name="twitter:description" content="Private instant transfers. X402 payment headers on Solana.">
+<meta name="twitter:image" content="https://sling402.io/og-banner.png">
+<meta name="theme-color" content="#FF5722">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-title" content="Sling402">
+<link rel="apple-touch-startup-image" href="/splash-iphone-x.png" media="(device-width:375px) and (device-height:812px) and (-webkit-device-pixel-ratio:3)">
+<link rel="apple-touch-startup-image" href="/splash-iphone-8plus.png" media="(device-width:414px) and (device-height:736px) and (-webkit-device-pixel-ratio:3)">
+<link rel="apple-touch-startup-image" href="/splash-iphone-8.png" media="(device-width:375px) and (device-height:667px) and (-webkit-device-pixel-ratio:2)">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+:root{--bg:#111111;--bg2:#171717;--bg3:#1e1e1e;--bg4:#262626;--acc:#FF5722;--acc2:#FF8A65;--acc3:#FFC107;--red:#EF4444;--green:#22C55E;--t1:#E8E8E8;--t2:#999;--t3:#555;--t4:#333;--b1:rgba(255,87,34,.06);--b2:rgba(255,87,34,.12);--fn:'IBM Plex Mono',monospace;--body:'DM Sans',sans-serif;--sidebar-w:220px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:15px}
+body{background:var(--bg);color:var(--t1);font-family:var(--body);font-size:1rem;-webkit-font-smoothing:antialiased;overflow:hidden;height:100vh;height:100dvh}
+::selection{background:var(--acc);color:#fff}
+.m{font-family:var(--fn)}
+
+/* ═══ APP LAYOUT — sidebar + main ═══ */
+.app{display:flex;height:100vh;height:100dvh}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:var(--sidebar-w);background:var(--bg2);border-right:1px solid rgba(255,255,255,.04);display:flex;flex-direction:column;flex-shrink:0;z-index:50;overflow:hidden}
+.side-logo{padding:20px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.side-logo svg{width:32px;height:32px;flex-shrink:0}
+.side-logo-text{font-family:var(--fn);font-size:15px;font-weight:700;color:var(--t1);letter-spacing:1px}
+.side-logo-text span{color:var(--acc);font-weight:800}
+.side-tag{font-family:var(--fn);font-size:8px;color:var(--acc);letter-spacing:2px;padding:2px 6px;border:1px solid rgba(255,87,34,.15);border-radius:3px;margin-left:auto;text-transform:uppercase}
+
+.side-nav{flex:1;overflow-y:auto;padding:12px 0;scrollbar-width:none}
+.side-nav::-webkit-scrollbar{display:none}
+.side-label{padding:6px 18px;font-family:var(--fn);font-size:8px;font-weight:600;letter-spacing:3px;color:var(--t4);text-transform:uppercase;margin-top:8px}
+.nb{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:var(--body);font-size:13px;font-weight:500;color:var(--t3);transition:all .12s;border-left:2px solid transparent;position:relative}
+.nb:hover{color:var(--t1);background:rgba(255,255,255,.02)}
+.nb.a{color:var(--acc);background:rgba(255,87,34,.04);border-left-color:var(--acc)}
+.nb.a .nb-icon{color:var(--acc)}
+.nb-icon{width:18px;text-align:center;font-size:14px;color:var(--t4);transition:color .12s;flex-shrink:0}
+.nb-badge{margin-left:auto;font-family:var(--fn);font-size:9px;padding:1px 6px;border-radius:3px;font-weight:600}
+
+.side-bottom{padding:14px 18px;border-top:1px solid rgba(255,255,255,.04)}
+.side-search{display:flex;gap:0;margin-bottom:10px}
+.side-search input{flex:1;background:var(--bg);border:1px solid rgba(255,255,255,.06);border-right:0;border-radius:5px 0 0 5px;padding:7px 10px;color:var(--t1);font-family:var(--fn);font-size:10px;outline:none;transition:.2s}
+.side-search input:focus{border-color:rgba(255,87,34,.2)}
+.side-search input::placeholder{color:var(--t4)}
+.side-search button{background:var(--bg3);border:1px solid rgba(255,255,255,.06);border-radius:0 5px 5px 0;padding:7px 8px;color:var(--t3);cursor:pointer;font-size:11px;font-family:var(--fn)}
+.side-search button:hover{color:var(--acc)}
+.side-wallet{width:100%;padding:8px;background:rgba(255,87,34,.05);border:1px solid rgba(255,87,34,.1);border-radius:6px;color:var(--acc);font-family:var(--fn);font-size:10px;font-weight:700;letter-spacing:1.5px;cursor:pointer;transition:.15s;text-transform:uppercase;text-align:center}
+.side-wallet:hover{background:rgba(255,87,34,.1);border-color:rgba(255,87,34,.2)}
+.side-bal{font-family:var(--fn);font-size:9px;color:var(--t3);text-align:center;margin-top:4px}
+.ldot{display:inline-block;width:5px;height:5px;background:var(--green);border-radius:50%;box-shadow:0 0 4px var(--green);margin-right:4px;animation:pls 2s ease-in-out infinite}
+@keyframes pls{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ═══ MAIN PANEL ═══ */
+.main-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:48px;display:flex;align-items:center;padding:0 24px;background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.04);gap:12px;flex-shrink:0}
+.topbar-title{font-family:var(--fn);font-size:12px;color:var(--t2);letter-spacing:1px;font-weight:600}
+.topbar-r{display:flex;align-items:center;gap:8px;margin-left:auto}
+.proto-badge{font-family:var(--fn);font-size:9px;padding:3px 8px;background:rgba(255,87,34,.06);border:1px solid rgba(255,87,34,.1);border-radius:4px;color:var(--acc);letter-spacing:1px;font-weight:600}
+
+.main{flex:1;overflow-y:auto;padding:20px 24px;scrollbar-width:thin;scrollbar-color:var(--bg3) var(--bg)}
+.main::-webkit-scrollbar{width:4px}.main::-webkit-scrollbar-track{background:var(--bg)}.main::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+
+/* ═══ STATS FOOTER ═══ */
+.sfooter{background:var(--bg2);border-top:1px solid rgba(255,255,255,.04);padding:8px 24px;display:grid;grid-template-columns:repeat(6,1fr);gap:6px;font-family:var(--fn);flex-shrink:0}
+.sfc{background:var(--bg);border:1px solid rgba(255,255,255,.03);border-radius:4px;padding:8px 10px}
+.sfc .sl{font-size:9px;color:var(--t4);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px}
+.sfc .sv{font-size:14px;color:var(--acc);font-weight:700}
+.sfc .ss{font-size:9px;color:var(--t4);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ═══ PAGES ═══ */
+.pg{display:none}.pg.a{display:block;animation:fu .12s ease-out}
+@keyframes fu{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ CARDS ═══ */
+.cd{background:var(--bg2);border:1px solid rgba(255,255,255,.04);border-radius:8px;margin-bottom:12px;overflow:hidden}
+.ch{padding:12px 16px;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--t2);border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:8px;letter-spacing:1px;text-transform:uppercase}
+.ch .ch-icon{color:var(--acc);font-size:14px}
+.cb{padding:0}
+
+/* ═══ TABLES ═══ */
+.tb{width:100%;border-collapse:collapse;font-size:13px}
+.tb th{text-align:left;padding:10px 14px;font-family:var(--fn);font-size:10px;font-weight:600;color:var(--t4);background:rgba(0,0,0,.2);border-bottom:1px solid rgba(255,255,255,.03);letter-spacing:2px;text-transform:uppercase}
+.tb td{padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.02);font-size:13px;transition:background .08s}
+.tb tr:hover td{background:rgba(255,87,34,.015)}
+
+/* ═══ BADGES ═══ */
+.bd{display:inline-block;padding:3px 8px;border-radius:4px;font-size:10px;font-family:var(--fn);letter-spacing:.5px;font-weight:600}
+.bd.bo{background:rgba(255,87,34,.1);color:var(--acc)}.bd.bf{background:rgba(239,68,68,.1);color:var(--red)}.bd.ba{background:rgba(255,193,7,.08);color:var(--acc3)}.bd.bt{background:rgba(255,193,7,.1);color:var(--acc3)}.bd.bk{background:rgba(239,68,68,.06);color:var(--red)}.bd.bc2{background:rgba(255,138,101,.08);color:var(--acc2)}.bd.be{background:rgba(34,197,94,.08);color:var(--green)}
+
+/* ═══ DETAIL ═══ */
+.dt{display:grid;grid-template-columns:140px 1fr;font-size:13px}
+.dt .k{padding:10px 14px;color:var(--t3);font-family:var(--fn);font-size:11px;background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.03)}
+.dt .v{padding:10px 14px;color:var(--t1);border-bottom:1px solid rgba(255,255,255,.03);word-break:break-all;font-family:var(--fn);font-size:11px}
+
+/* ═══ LINKS ═══ */
+.hl{color:var(--acc);cursor:pointer;font-family:var(--fn);font-size:12px;transition:.1s}.hl:hover{color:var(--acc2)}
+.al{color:var(--acc);cursor:pointer;font-family:var(--fn);font-size:12px;opacity:.5;transition:.1s}.al:hover{opacity:1}
+.cp2{background:var(--bg3);border:1px solid rgba(255,255,255,.06);padding:2px 8px;border-radius:3px;color:var(--t3);cursor:pointer;font-size:9px;margin-left:4px;font-family:var(--fn)}.cp2:hover{color:var(--acc)}
+
+/* ═══ PAGINATION ═══ */
+.pag{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px}
+.pag button{background:var(--bg);border:1px solid rgba(255,255,255,.04);padding:5px 10px;color:var(--t3);cursor:pointer;border-radius:4px;font-size:12px;font-family:var(--fn);transition:.1s}
+.pag button:hover:not(:disabled){color:var(--acc)}.pag button:disabled{opacity:.15;cursor:not-allowed}.pag .cur{font-family:var(--fn);font-size:12px;color:var(--acc);font-weight:700}
+
+/* ═══ GRIDS ═══ */
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ═══ INPUTS / BUTTONS ═══ */
+.fi{width:100%;padding:10px 14px;background:var(--bg);border:1px solid rgba(255,255,255,.06);border-radius:6px;color:var(--t1);font-family:var(--fn);font-size:13px;outline:none;transition:.2s}.fi:focus{border-color:rgba(255,87,34,.2)}.fi::placeholder{color:var(--t4)}
+.btn{padding:10px 22px;background:var(--acc);border:none;border-radius:6px;color:#fff;font-family:var(--fn);font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:.15s;text-transform:uppercase}.btn:hover{background:#E64A19;box-shadow:0 4px 16px rgba(255,87,34,.2)}.btn:active{transform:scale(.98)}
+
+/* ═══ GUIDE ═══ */
+.guide{padding:20px;font-size:14px;line-height:1.8;color:var(--t2)}.guide h3{color:var(--acc);font-family:var(--fn);font-size:12px;margin:16px 0 6px;letter-spacing:2px;text-transform:uppercase}.guide p{margin-bottom:8px}.guide code{background:var(--bg);padding:2px 8px;border-radius:4px;font-family:var(--fn);font-size:11px;color:var(--acc)}
+.bridge-box{background:var(--bg);border:1px solid rgba(255,255,255,.04);padding:12px 16px;border-radius:6px;font-family:var(--fn);font-size:13px;color:var(--t2);margin:8px 0}
+.x402-header{background:var(--bg);border:1px solid rgba(255,87,34,.1);border-radius:6px;padding:12px 16px;font-family:var(--fn);font-size:11px;color:var(--t2);margin:8px 0;line-height:2}
+.x402-header .hk{color:var(--acc);font-weight:600}
+.x402-header .hv{color:var(--t1)}
+
+/* ═══ FAUCET / CONVERT ═══ */
+.faucet-box{max-width:500px}.faucet-box h2{font-family:var(--fn);font-size:18px;color:var(--t1);margin-bottom:10px;letter-spacing:1px}.faucet-box .big{font-family:var(--fn);font-weight:700}
+.faucet-box input{width:100%;padding:10px 14px;background:var(--bg);border:1px solid rgba(255,255,255,.06);border-radius:6px;color:var(--t1);font-family:var(--fn);font-size:13px;outline:none;margin-bottom:10px}
+.faucet-box .claim-btn{padding:12px 28px;border:none;border-radius:6px;font-family:var(--fn);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:.15s}
+.faucet-box .msg{font-family:var(--fn);font-size:12px;margin-top:10px;min-height:18px}
+.faucet-box .convert-info{margin-top:16px;padding:14px;background:var(--bg);border:1px solid rgba(255,255,255,.04);border-radius:6px;font-size:12px;color:var(--t3);line-height:1.9}
+
+/* ═══ MOBILE SIDEBAR ═══ */
+.menu-toggle{display:none;background:none;border:none;color:var(--t1);font-size:20px;cursor:pointer;padding:4px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:49}
+
+@media(max-width:1100px){.sfooter{grid-template-columns:repeat(3,1fr)}.exp-grid{grid-template-columns:1fr}}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-260px;top:0;bottom:0;width:250px;z-index:100;transition:left .25s ease;box-shadow:4px 0 24px rgba(0,0,0,.3)}
+  .sidebar.open{left:0}
+  .sidebar-overlay.open{display:block}
+  .menu-toggle{display:block}
+  .sfooter{grid-template-columns:repeat(2,1fr);padding:6px 12px}
+  .main{padding:12px 14px}
+  .tb th{font-size:9px;padding:8px 10px}.tb td{font-size:12px;padding:6px 10px}
+  .dt{grid-template-columns:100px 1fr}
+  #p-tokenomics>div{grid-template-columns:1fr!important}
+}
+@media(max-width:480px){
+  .sfooter{grid-template-columns:1fr 1fr}
+  .ch{font-size:11px}.tb td{font-size:11px;padding:6px 8px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<!-- SIDEBAR -->
+<div class="sidebar-overlay" id="sOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="side-logo">
+    <svg viewBox="0 0 32 32" width="32" height="32"><circle cx="16" cy="16" r="14" fill="#FF5722"/><circle cx="16" cy="16" r="9" fill="#1a1a1a"/><circle cx="16" cy="16" r="5" fill="#FF5722"/></svg>
+    <div class="side-logo-text"><span>Sling</span>402</div>
+    <span class="side-tag">X402</span>
+  </div>
+  <nav class="side-nav">
+    <div class="side-label">Protocol</div>
+    <button class="nb a" data-p="explorer"><span class="nb-icon">⊞</span> Explorer</button>
+    <button class="nb" data-p="tokens"><span class="nb-icon">◈</span> Tokens</button>
+    <button class="nb" data-p="agents"><span class="nb-icon">◉</span> Agents<span class="nb-badge" style="background:rgba(255,87,34,.1);color:var(--acc)">12</span></button>
+    <button class="nb" data-p="programs"><span class="nb-icon">⟨/⟩</span> Programs</button>
+    <div class="side-label">Payments</div>
+    <button class="nb" data-p="faucet"><span class="nb-icon">◇</span> Faucet<span class="nb-badge" style="background:rgba(34,197,94,.08);color:var(--green)"><span class="ldot"></span>LIVE</span></button>
+    <button class="nb" data-p="convert"><span class="nb-icon">⇄</span> Convert</button>
+    <div class="side-label">Info</div>
+    <button class="nb" data-p="tokenomics"><span class="nb-icon">◔</span> Supply</button>
+    <button class="nb" data-p="guide"><span class="nb-icon">?</span> X402 Guide</button>
+  </nav>
+  <div class="side-bottom">
+    <div class="side-search"><input id="searchIn" placeholder="Search tx / block..." onkeydown="if(event.key==='Enter')doSearch()"><button onclick="doSearch()">→</button></div>
+    <button class="side-wallet" id="walBtn" onclick="connectWallet()">Connect Wallet</button>
+    <div class="side-bal" id="sBal"></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-panel">
+<div class="topbar">
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <span class="topbar-title" id="pageTitle">Explorer</span>
+  <div class="topbar-r">
+    <span class="proto-badge">X-402-Payment</span>
+    <span style="font-family:var(--fn);font-size:9px;color:var(--t3)"><span class="ldot"></span>CHAIN SYNC</span>
+  </div>
+</div>
+<div class="main">
+
+<div class="pg a" id="p-explorer"><div class="exp-grid">
+  <div class="cd"><div class="ch"><span class="ch-icon">⊞</span> Latest Blocks</div><div class="cb"><table class="tb"><thead><tr><th>Block</th><th>Age</th><th>Txns</th><th>Hash</th></tr></thead><tbody id="bBody"></tbody></table><div class="pag" id="pgB"></div></div></div>
+  <div class="cd"><div class="ch"><span class="ch-icon">⟶</span> Latest Transactions</div><div class="cb"><table class="tb"><thead><tr><th>Hash</th><th>X-402</th><th>From</th><th>Value</th></tr></thead><tbody id="tBody"></tbody></table><div class="pag" id="pgT"></div></div></div>
+</div></div>
+
+<div class="pg" id="p-faucet"><div style="max-width:500px"><div class="cd"><div class="ch"><span class="ch-icon">◇</span> Faucet<span style="margin-left:auto;font-size:10px;color:var(--t4)">1 claim per wallet</span></div><div class="cb" style="padding:20px">
+  <div style="display:flex;justify-content:space-between;margin-bottom:12px" class="m"><span style="color:var(--t3);font-size:13px">Pool Balance</span><span style="color:var(--acc);font-size:13px" id="fBl">—</span></div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:16px" class="m"><span style="color:var(--t3);font-size:13px">Total Claims</span><span id="fCl" style="color:var(--t2);font-size:13px">—</span></div>
+  <input class="fi" id="fAddr" placeholder="Wallet address..." style="margin-bottom:12px">
+  <button class="btn" style="width:100%" onclick="claimFaucet()">CLAIM 1,000 S402</button>
+  <div id="fMsg" class="m" style="font-size:12px;margin-top:10px;min-height:18px"></div>
+</div></div></div></div>
+
+<div class="pg" id="p-tokens"><div class="cd"><div class="ch"><span class="ch-icon">◈</span> All Tokens</div><div class="cb"><table class="tb"><thead><tr><th>Token</th><th>Symbol</th><th>Mint</th><th>Supply</th><th>Creator</th></tr></thead><tbody id="tokList"></tbody></table></div></div></div>
+
+<div class="pg" id="p-programs"><div class="cd"><div class="ch"><span class="ch-icon">⟨/⟩</span> Programs</div><div class="cb" id="progList"></div></div></div>
+
+<div class="pg" id="p-agents"><div class="cd"><div class="ch"><span class="ch-icon">◉</span> Payment Agents</div><div class="cb"><table class="tb"><thead><tr><th>Agent</th><th>Address</th><th>Badges</th><th>Status</th><th>Last Action</th><th>Online</th></tr></thead><tbody id="agBody"></tbody></table></div></div></div>
+
+<div class="pg" id="p-convert"><div class="faucet-box">
+  <h2>⇄ wS402 → S402 Converter</h2>
+  <div class="big" style="font-size:28px;color:var(--acc)">10,000 wS402 = 1 S402</div>
+  <p style="font-size:13px;color:var(--t3);margin:16px 0 20px">Burn wrapped tokens to mint native S402.</p>
+  <input id="cvAmt" placeholder="Amount wS402..." type="number">
+  <br><button class="claim-btn" onclick="doConvert()" style="background:var(--acc);color:#fff">CONVERT</button>
+  <div class="msg" id="cvMsg"></div>
+  <div class="convert-info"><strong>Conversion Path:</strong><br>1. Earn wS402 via X402 payment routing<br>2. Convert 10,000 wS402 → 1 S402 (burn + mint)<br>3. Bridge S402 → Solana Mainnet <span class="bd bt">SOON</span></div>
+</div></div>
+
+<div class="pg" id="p-tx"><div class="cd"><div class="ch"><span class="ch-icon">⟶</span> Transaction Details</div><div class="cb"><div class="dt" id="txD"></div></div></div><div class="cd" id="txLogs" style="display:none"><div class="ch">Program Logs</div><div class="cb"><div id="txLogBody" class="m" style="padding:16px;font-size:12px;color:var(--t2);line-height:2"></div></div></div></div>
+
+<div class="pg" id="p-addr"><div class="cd"><div class="ch">Account</div><div class="cb"><div class="dt" id="aD"></div></div></div><div class="cd" id="aTxC" style="display:none"><div class="ch">Transactions</div><div class="cb"><table class="tb"><thead><tr><th>Signature</th><th>Type</th><th>From</th><th></th><th>To</th><th>Amount</th></tr></thead><tbody id="aTx"></tbody></table></div></div></div>
+
+<div class="pg" id="p-block"><div class="cd"><div class="ch">Block Details</div><div class="cb"><div class="dt" id="bD"></div></div></div><div class="cd" id="bTxC" style="display:none"><div class="ch">Block Transactions</div><div class="cb"><table class="tb"><thead><tr><th>Signature</th><th>Type</th><th>From</th><th>Amount</th></tr></thead><tbody id="bTx"></tbody></table></div></div></div>
+
+<div class="pg" id="p-tokenomics"><div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
+  <div class="cd"><div class="ch"><span class="ch-icon">◔</span> $S402 Supply & Allocation <span style="margin-left:auto;font-size:11px;color:var(--t3)">1,000,000,000 total</span></div><div class="cb">
+    <div style="padding:14px 18px;background:var(--bg);border:1px solid rgba(255,255,255,.04);border-radius:6px;margin:12px;font-size:12px;color:var(--t2)" class="m"><strong style="color:var(--t1)">Supply Model</strong><br>All 1B $S402 minted at genesis. Treasury wallets visible on-chain. X402 payment fees fund protocol development.</div>
+    <table class="tb"><thead><tr><th>Pool</th><th>%</th><th>Amount</th><th>Treasury Wallet</th><th>Live Balance</th></tr></thead><tbody id="tokBody"></tbody></table>
+    <div id="tokCirc" class="m" style="padding:12px;font-size:12px;color:var(--t2);border-top:1px solid rgba(255,255,255,.03)"></div>
+  </div></div>
+  <div>
+    <div class="cd"><div class="ch">How X402 Works</div><div class="cb" style="padding:16px;font-size:13px;color:var(--t2);line-height:1.9">
+      <strong style="color:var(--acc)">◇ Faucet</strong><br>1,000 S402 per wallet. Seed your X402 payment channel.<br><br>
+      <strong style="color:var(--acc)">⇄ Convert</strong><br>Burns wS402, mints S402 from DEX Liquidity at 10,000:1.<br><br>
+      <strong style="color:var(--acc)">◉ Agents</strong><br>12 payment agents route, validate, and settle X402 transactions.
+    </div></div>
+    <div class="cd" style="margin-top:12px"><div class="ch">Team Lock</div><div class="cb" style="padding:16px;font-size:13px;color:var(--t2);line-height:1.8">15% (150M S402) locked 6 months. Linear vesting.</div></div>
+  </div>
+</div></div>
+
+<div class="pg" id="p-guide"><div class="cd"><div class="ch"><span class="ch-icon">?</span> X402 Payment Protocol</div><div class="cb"><div class="guide">
+<h3>WHAT IS X402?</h3>
+<p><strong style="color:var(--acc)">x402 is the HTTP native payment protocol</strong> defined by Coinbase. It uses the <code>HTTP 402 Payment Required</code> status code to enable machine-to-machine and peer-to-peer micropayments. Sling402 implements x402 v1 on Solana — private, instant, zero markup.</p>
+
+<h3>HOW X402 PAYMENTS WORK</h3>
+<p><strong>Step 1:</strong> Client requests a paid resource without payment.</p>
+<p><strong>Step 2:</strong> Server responds with <code>402 Payment Required</code> and payment requirements:</p>
+<div class="x402-header">
+  <span class="hk">HTTP/1.1</span> <span class="hv">402 Payment Required</span><br><br>
+  <span class="hk">"x402Version":</span> <span class="hv">1</span><br>
+  <span class="hk">"scheme":</span> <span class="hv">"exact"</span><br>
+  <span class="hk">"network":</span> <span class="hv">"solana-mainnet"</span><br>
+  <span class="hk">"maxAmountRequired":</span> <span class="hv">"1000"</span> <span style="color:var(--t3)">(micro-USDC, $0.001)</span><br>
+  <span class="hk">"payTo":</span> <span class="hv">"EPgK11Qa7Xectz...Mib2zD"</span><br>
+  <span class="hk">"asset":</span> <span class="hv">"Gh9ZwEmd...tKJr"</span> <span style="color:var(--t3)">(USDC mint)</span><br>
+  <span class="hk">"maxTimeoutSeconds":</span> <span class="hv">300</span><br>
+  <span class="hk">"resource":</span> <span class="hv">"/api/premium-data"</span>
+</div>
+<p><strong>Step 3:</strong> Client signs and submits payment on-chain, then retries with proof in the <code>X-PAYMENT</code> header:</p>
+<div class="x402-header">
+  <span class="hk">X-PAYMENT:</span> <span class="hv">base64({</span><br>
+  &nbsp;&nbsp;<span class="hk">"x402Version":</span> <span class="hv">1,</span><br>
+  &nbsp;&nbsp;<span class="hk">"scheme":</span> <span class="hv">"exact",</span><br>
+  &nbsp;&nbsp;<span class="hk">"network":</span> <span class="hv">"solana-mainnet",</span><br>
+  &nbsp;&nbsp;<span class="hk">"payload":</span> <span class="hv">{ "signature": "5j7s6NiJS3J..." }</span><br>
+  <span class="hv">})</span>
+</div>
+<p><strong>Step 4:</strong> Server verifies the on-chain transaction and returns the resource. All payments are final, instant, and verifiable.</p>
+
+<h3>PAYMENT AGENTS</h3>
+<p>12 autonomous agents handle the Sling402 payment infrastructure:</p>
+<div class="x402-header" style="line-height:2.2">
+  <span class="hk">Meridian</span> — <span class="hv">Payment routing &amp; path optimization</span><br>
+  <span class="hk">Conduit</span> — <span class="hv">Payment channel management</span><br>
+  <span class="hk">Arbiter</span> — <span class="hv">Dispute resolution &amp; refunds</span><br>
+  <span class="hk">Nexus</span> — <span class="hv">Cross-chain bridge operations</span><br>
+  <span class="hk">Lattice</span> — <span class="hv">Liquidity provisioning</span><br>
+  <span class="hk">Cipher</span> — <span class="hv">Privacy layer &amp; encryption</span><br>
+  <span class="hk">Prism</span> — <span class="hv">Fee optimization &amp; gas estimation</span><br>
+  <span class="hk">Relay</span> — <span class="hv">Transaction broadcasting</span><br>
+  <span class="hk">Sentinel</span> — <span class="hv">Fraud detection &amp; security</span><br>
+  <span class="hk">Vaultr</span> — <span class="hv">Escrow &amp; custody services</span><br>
+  <span class="hk">Beacon</span> — <span class="hv">Price oracle &amp; rate feeds</span><br>
+  <span class="hk">Fulcrum</span> — <span class="hv">Settlement engine</span>
+</div>
+
+<h3>DUAL TOKEN</h3>
+<p><strong style="color:var(--acc)">$S402</strong> — Native payment token. 1B supply. Used for X402 transaction fees and settlements.</p>
+<p><strong style="color:var(--acc2)">$wS402</strong> — Wrapped S402 for DeFi integrations. 10,000:1 conversion ratio.</p>
+
+<h3>PRIVACY</h3>
+<p>Sling402 is private by design. The protocol only verifies that a valid payment was made — not who made it. No KYC. No tracking. Payment channels are encrypted end-to-end.</p>
+
+<h3>INTEGRATE X402</h3>
+<div class="bridge-box" style="text-align:left;line-height:1.8;font-size:11px">
+<span style="color:var(--acc)">npm install</span> @x402-solana/server @solana/web3.js<br>
+<span style="color:var(--acc)">npm install</span> @x402-solana/client @solana/web3.js<br>
+<span style="color:var(--acc)">npm install</span> @x402-solana/react @solana/wallet-adapter-react
+</div>
+
+<h3>ADD TO WALLET</h3>
+<div class="bridge-box" style="text-align:left;line-height:2">RPC: <span style="cursor:pointer;color:var(--acc)" onclick="navigator.clipboard.writeText('https://sling402.io/rpc')">https://sling402.io/rpc</span><br>Symbol: S402 · Decimals: 9</div>
+
+<h3>LINKS</h3>
+<p><a href="https://sling402.io" style="color:var(--acc)">sling402.io</a> · <a href="https://x.com/Sling402" style="color:var(--acc)">@Sling402</a></p>
+</div></div></div>
+
+</div><!-- /main -->
+
+<div class="sfooter">
+  <div class="sfc"><div class="sl">BLOCK</div><div class="sv" id="sSlot">0</div><div class="ss">latest confirmed</div></div>
+  <div class="sfc"><div class="sl">TPS</div><div class="sv" id="sTPS">~3</div><div class="ss">payments/sec</div></div>
+  <div class="sfc"><div class="sl">PAYMENTS</div><div class="sv" id="sTxns">0</div><div class="ss">X402 total</div></div>
+  <div class="sfc"><div class="sl">TOKENS</div><div class="sv" id="sTok">0</div><div class="ss">deployed</div></div>
+  <div class="sfc"><div class="sl">AGENTS</div><div class="sv" id="sAg">0</div><div class="ss">payment routers</div></div>
+  <div class="sfc"><div class="sl">SUPPLY</div><div class="sv">1B</div><div class="ss">$S402 fixed</div></div>
+</div>
+</div><!-- /main-panel -->
+</div><!-- /app -->
+
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sOverlay').classList.toggle('open')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sOverlay').classList.remove('open')}
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js")}</script>
+<script src="/app.js"></script>
+</body>
+</html>

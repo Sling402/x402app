@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sling402 — DEX</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="description" content="Sling402 DEX — Trade tokens on the X402 payment protocol. Powered by Solana.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sling402.io/dex">
+<meta property="og:site_name" content="Sling402">
+<meta property="og:title" content="Sling402 — DEX">
+<meta property="og:description" content="Trade tokens on the X402 payment protocol. Powered by Solana.">
+<meta property="og:image" content="https://sling402.io/og-banner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Sling402">
+<meta name="twitter:title" content="Sling402 — DEX">
+<meta name="twitter:description" content="Trade tokens on the X402 payment protocol. Powered by Solana.">
+<meta name="twitter:image" content="https://sling402.io/og-banner.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c0a;--bg2:#111311;--bg3:#161816;--bg4:#222;--neon:var(--acc, #FF5722);--red:#ff4444;--red2:#ff3b3b;--grn:var(--acc, #FF5722);--t1:#f0f0f0;--t2:#888;--t3:#555;--t4:#333;--b1:rgba(255,255,255,.06)}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--t1);font-family:'Outfit',sans-serif;font-size:13px;-webkit-font-smoothing:antialiased}
+::selection{background:var(--acc, #FF5722);color:#000}
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--b1);background:var(--bg2)}
+.top .logo{font-family:'Space Mono',monospace;font-weight:700;font-size:13px;color:var(--acc, #FF5722);cursor:pointer;display:flex;align-items:center;gap:10px;text-decoration:none;letter-spacing:2px}
+.top .logo img{width:24px;height:24px}
+.tabs{display:flex;gap:0}
+.tab{padding:10px 18px;background:none;border:none;border-bottom:2px solid transparent;color:var(--t3);font-family:'Outfit';font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.3px}.tab:hover{color:var(--t2)}.tab.a{color:var(--acc, #FF5722);border-bottom-color:var(--acc, #FF5722)}
+.tlist{width:100%;border-collapse:collapse}
+.tlist th{text-align:left;padding:9px 14px;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;background:var(--bg2);border-bottom:1px solid var(--b1);position:sticky;top:0;z-index:1}
+.tlist th.r,.tlist td.r{text-align:right}
+.tlist td{padding:9px 14px;font-size:11px;color:var(--t2);border-bottom:1px solid var(--b1);cursor:pointer}
+.tlist tr:hover td{background:rgba(221,255,0,.02)}
+.tk-name{display:flex;align-items:center;gap:10px}
+.tk-ico{width:30px;height:30px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid var(--b1)}
+.tk-sym{font-family:'Space Mono',monospace;font-weight:700;color:var(--acc, #FF5722);font-size:12px}
+.tk-chain{font-family:'Space Mono';font-size:8px;color:var(--t4);background:rgba(221,255,0,.06);padding:1px 5px;border-radius:2px;margin-left:4px;border:1px solid rgba(221,255,0,.08)}
+.tk-full{font-size:10px;color:var(--t3)}
+.up{color:var(--acc, #FF5722)}.dn{color:var(--red2)}
+#detail{display:none}
+.det-top{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--b1);background:var(--bg2)}
+.det-top .back{background:none;border:1px solid var(--b1);color:var(--t2);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:'Space Mono';font-size:10px;transition:all .15s}
+.det-top .back:hover{border-color:var(--acc, #FF5722);color:var(--acc, #FF5722)}
+.det-body{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 90px)}
+.det-left{border-right:1px solid var(--b1);overflow:hidden;display:flex;flex-direction:column}
+.det-right{overflow-y:auto;display:flex;flex-direction:column}
+.chart-area{flex:1;position:relative;background:var(--bg);min-height:300px}
+.chart-area canvas{width:100%!important;height:100%!important}
+.trades{flex:1;overflow-y:auto;min-height:200px}
+.trades table{width:100%;border-collapse:collapse}
+.trades th{text-align:left;padding:7px 12px;font-family:'Space Mono';font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;background:var(--bg2);border-bottom:1px solid var(--b1);position:sticky;top:0}
+.trades td{padding:6px 12px;font-family:'Space Mono';font-size:10px;color:var(--t2);border-bottom:1px solid var(--b1)}
+.dstats{padding:14px;border-bottom:1px solid var(--b1)}
+.ds-row{display:flex;justify-content:space-between;padding:6px 0;font-size:11px}
+.ds-row .k{color:var(--t3);font-weight:600}.ds-row .v{color:var(--t1);font-family:'Space Mono';font-weight:700;font-size:11px}
+.ds-price{padding:20px 14px;border-bottom:1px solid var(--b1);text-align:center}
+.ds-price .big{font-family:'Space Mono';font-size:24px;font-weight:700;color:var(--acc, #FF5722)}
+.ds-price .sub{font-family:'Space Mono';font-size:10px;color:var(--t3);margin-top:2px}
+.ds-chg{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--b1)}
+.ds-chg div{padding:10px;text-align:center;border-right:1px solid var(--b1);font-family:'Space Mono';font-size:10px}
+.ds-chg div:last-child{border-right:none}
+.ds-chg .lbl{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:2px}
+.ds-vol{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--b1)}
+.ds-vol div{padding:10px;text-align:center;border-right:1px solid var(--b1);font-size:11px}
+.ds-vol div:last-child{border-right:none}
+.ds-vol .lbl{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+.ds-bs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--b1)}
+.ds-bs div{padding:10px;text-align:center;font-family:'Space Mono';font-size:13px;font-weight:700}
+.swap-box{padding:14px;border-bottom:1px solid var(--b1)}
+.swap-box h3{font-family:'Space Mono';font-size:10px;color:var(--t3);margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.sw-inp input{width:100%;padding:10px;background:var(--bg);border:1px solid var(--b1);border-radius:4px;color:var(--t1);font-family:'Space Mono';font-size:12px;outline:none;margin-bottom:6px;transition:border .15s}
+.sw-inp input:focus{border-color:var(--acc, #FF5722)}
+.sw-btn{width:100%;padding:10px;border:none;font-family:'Space Mono';font-size:11px;font-weight:700;cursor:pointer;border-radius:4px;margin-top:3px;letter-spacing:1px;transition:all .15s}
+.sw-buy{background:var(--acc, #FF5722);color:#000}.sw-buy:hover{box-shadow:0 0 16px rgba(221,255,0,.3)}
+.sw-sell{background:var(--red);color:#fff}.sw-sell:hover{box-shadow:0 0 16px rgba(232,32,32,.3)}
+@media(max-width:900px){.det-body{grid-template-columns:1fr}.det-right{max-height:50vh}}
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="logo" href="/"><img src="/favicon.svg" alt="">Sling402 DEX</a>
+  <div class="tabs"><button class="tab a" onclick="showList()">📊 Tokens</button><button class="tab" onclick="location.href='/'">🔍 Explorer</button></div>
+</div>
+
+<div id="list">
+<table class="tlist"><thead><tr>
+  <th style="width:30px">#</th><th>Token</th><th class="r">Price ◎</th><th class="r">Age</th><th class="r">Txns</th><th class="r">Volume</th><th class="r">Makers</th>
+  <th class="r">5m</th><th class="r">1h</th><th class="r">6h</th><th class="r">24h</th>
+  <th class="r">Liquidity</th><th class="r">MCap</th>
+</tr></thead><tbody id="tBody"></tbody></table>
+</div>
+
+<div id="detail">
+  <div class="det-top">
+    <button class="back" onclick="showList()">← BACK</button>
+    <div id="dIco" style="font-size:26px"></div>
+    <div><div style="font-family:Space Mono;font-weight:700;font-size:15px" id="dName"></div><div style="font-family:Space Mono;font-size:10px;color:var(--t3)" id="dAddr"></div></div>
+    <div style="margin-left:auto;display:flex;gap:6px" id="dLinks"></div>
+  </div>
+  <div class="det-body">
+    <div class="det-left">
+      <div class="chart-area"><canvas id="chartCanvas"></canvas></div>
+      <div class="trades"><table><thead><tr><th>Time</th><th>Type</th><th>S402</th><th>Tokens</th><th>Price</th><th>Maker</th></tr></thead><tbody id="tradeBody"></tbody></table></div>
+    </div>
+    <div class="det-right">
+      <div class="ds-price"><div class="big" id="dPrice">◎ 0</div><div class="sub" id="dPriceSh"></div></div>
+      <div class="ds-chg" id="dChg"></div>
+      <div class="ds-vol" id="dVol"></div>
+      <div class="ds-bs" id="dBS"></div>
+      <div class="dstats" id="dStats"></div>
+      <div class="swap-box">
+        <h3>Swap</h3>
+        <div id="swWallet" style="font-family:Space Mono;font-size:10px;color:var(--t3);margin-bottom:8px;padding:6px 8px;background:var(--bg);border:1px solid var(--b1);border-radius:4px">⚠ Connect wallet to trade</div>
+        <div class="sw-inp"><input id="swAmt" placeholder="Amount S402..." type="number"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <button class="sw-btn sw-buy" onclick="doSwap('buy')">BUY</button>
+          <button class="sw-btn sw-sell" onclick="doSwap('sell')">SELL</button>
+        </div>
+        <div id="swMsg" style="font-family:Space Mono;font-size:10px;color:var(--t3);margin-top:8px;min-height:14px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API=location.origin;let tokens=[],curToken=null;
+const SESSION=new URLSearchParams(location.search).get('session')||sessionStorage.getItem('sling402_session')||document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('session='))?.split('=')[1]||'';
+async function fj(u){const r=await fetch(API+u,{headers:{'X-Session':SESSION}});if(r.status===401){location.href='/';return{}}return r.json();}
+function fmt(n,d=2){if(!n||isNaN(n))return'0';if(Math.abs(n)>=1e9)return(n/1e9).toFixed(1)+'B';if(Math.abs(n)>=1e6)return(n/1e6).toFixed(1)+'M';if(Math.abs(n)>=1e3)return(n/1e3).toFixed(1)+'K';return n.toFixed?n.toFixed(d):n;}
+function fmtP(n){if(!n||isNaN(n))return'◎ 0';if(n<0.001)return'◎ '+n.toFixed(7);if(n<1)return'◎ '+n.toFixed(4);return'◎ '+n.toFixed(2);}
+function pchg(v){if(!v||isNaN(v))return'<span style="color:var(--t3)">0%</span>';return v>0?'<span class="up">+'+v.toFixed(1)+'%</span>':'<span class="dn">'+v.toFixed(1)+'%</span>';}
+function age(ms){if(!ms)return'—';const s=ms/1000;if(s<60)return Math.floor(s)+'s';if(s<3600)return Math.floor(s/60)+'m';if(s<86400)return Math.floor(s/3600)+'h';return Math.floor(s/86400)+'d';}
+
+async function loadTokens(){
+  tokens=await fj('/api/dex/tokens');
+  document.getElementById('tBody').innerHTML=tokens.map((t,i)=>`<tr onclick="showToken('${t.mint}')">
+    <td style="color:var(--t3);font-family:Space Mono;font-size:10px">${i+1}</td>
+    <td><div class="tk-name"><div class="tk-ico">${t.logo||'🪙'}</div><div><span class="tk-sym">${t.symbol}</span><span class="tk-chain">S402</span>${(t.badges||[]).map(b=>`<span style="font-size:7px;padding:1px 4px;border-radius:2px;background:${b.color}22;color:${b.color};margin-left:3px">${b.label}</span>`).join('')}<br><span class="tk-full">${t.name}</span></div></div></td>
+    <td class="r" style="font-family:Space Mono;font-size:11px">${fmtP(t.currentPrice||t.price)}</td>
+    <td class="r" style="color:var(--t3)">${age(t.age)}</td>
+    <td class="r" style="font-family:Space Mono">${fmt(t.txCount,0)}</td>
+    <td class="r" style="font-family:Space Mono">${fmt(t.volume24h)} ◎</td>
+    <td class="r" style="font-family:Space Mono">${fmt(t.makers,0)}</td>
+    <td class="r">${pchg(t.priceChange5m)}</td>
+    <td class="r">${pchg(t.priceChange1h)}</td>
+    <td class="r">${pchg(t.priceChange6h)}</td>
+    <td class="r">${pchg(t.priceChange24h)}</td>
+    <td class="r" style="font-family:Space Mono">${fmt(t.liquidity)} ◎</td>
+    <td class="r" style="font-family:Space Mono">${fmt(t.mcap)} ◎</td>
+  </tr>`).join('');
+}
+
+async function showToken(mint){
+  document.getElementById('list').style.display='none';document.getElementById('detail').style.display='block';
+  const t=tokens.find(tk=>tk.mint===mint)||await fj('/api/dex/token/'+mint);curToken=t;
+  document.getElementById('dIco').textContent=t.logo||'🪙';
+  document.getElementById('dName').innerHTML=`${t.name} <span style="color:var(--acc, #FF5722)">$${t.symbol}</span>`;
+  document.getElementById('dAddr').textContent=t.mint||t.address;
+  document.getElementById('dPrice').textContent=fmtP(t.currentPrice||t.price);
+  document.getElementById('dPriceSh').textContent=(t.currentPrice||t.price)?.toFixed(9)+' S402';
+  let links='';if(t.website)links+=`<a href="${t.website}" target="_blank" style="padding:4px 12px;background:var(--bg);border:1px solid var(--b1);border-radius:4px;color:var(--t2);font-family:Space Mono;font-size:10px;text-decoration:none">🌐</a>`;
+  if(t.twitter)links+=`<a href="${t.twitter}" target="_blank" style="padding:4px 12px;background:var(--bg);border:1px solid var(--b1);border-radius:4px;color:var(--t2);font-family:Space Mono;font-size:10px;text-decoration:none">𝕏</a>`;
+  document.getElementById('dLinks').innerHTML=links;
+  document.getElementById('dChg').innerHTML=`<div><div class="lbl">5M</div>${pchg(t.priceChange5m)}</div><div><div class="lbl">1H</div>${pchg(t.priceChange1h)}</div><div><div class="lbl">6H</div>${pchg(t.priceChange6h)}</div><div><div class="lbl">24H</div>${pchg(t.priceChange24h)}</div>`;
+  document.getElementById('dVol').innerHTML=`<div><div class="lbl">Txns</div><strong style="font-family:Space Mono">${fmt(t.txCount,0)}</strong></div><div><div class="lbl">Volume</div><strong style="font-family:Space Mono">${fmt(t.volume24h)}</strong></div><div><div class="lbl">Makers</div><strong style="font-family:Space Mono">${fmt(t.makers,0)}</strong></div>`;
+  document.getElementById('dBS').innerHTML=`<div style="color:var(--acc, #FF5722)">⬆ ${fmt(t.buys,0)}</div><div style="color:var(--red2)">⬇ ${fmt(t.sells,0)}</div>`;
+  document.getElementById('dStats').innerHTML=`<div class="ds-row"><span class="k">Liquidity</span><span class="v">${fmt(t.liquidity)} ◎</span></div><div class="ds-row"><span class="k">Market Cap</span><span class="v">${fmt(t.mcap)} ◎</span></div><div class="ds-row"><span class="k">Supply</span><span class="v">${fmt(t.supply,0)}</span></div><div class="ds-row"><span class="k">Creator</span><span class="v" style="font-size:9px;opacity:.5">${(t.creator||'').slice(0,14)}…</span></div>`;
+  loadChart(mint);loadTrades(mint);
+}
+
+async function loadChart(mint){
+  const data=await fj('/api/dex/chart/'+mint);const canvas=document.getElementById('chartCanvas');const ctx=canvas.getContext('2d');
+  const W=canvas.parentElement.clientWidth,H=canvas.parentElement.clientHeight||300;canvas.width=W;canvas.height=H;
+  ctx.fillStyle='#0a0c0a';ctx.fillRect(0,0,W,H);if(!data.length)return;
+  const prices=data.map(d=>d.close);const mn=Math.min(...prices)*0.95,mx=Math.max(...prices)*1.05;
+  const pad={l:65,r:10,t:10,b:30},cw=W-pad.l-pad.r,ch=H-pad.t-pad.b,bw=Math.max(2,cw/data.length-1);
+  ctx.strokeStyle='rgba(255,255,255,.03)';ctx.lineWidth=1;
+  for(let i=0;i<5;i++){const y=pad.t+ch*i/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();ctx.fillStyle='#444';ctx.font='9px Space Mono';ctx.fillText((mx-(mx-mn)*i/4).toFixed(6),4,y+3);}
+  data.forEach((d,i)=>{
+    const x=pad.l+i*(cw/data.length);const oY=pad.t+ch*(1-(d.open-mn)/(mx-mn));const cY=pad.t+ch*(1-(d.close-mn)/(mx-mn));
+    const hY=pad.t+ch*(1-(d.high-mn)/(mx-mn));const lY=pad.t+ch*(1-(d.low-mn)/(mx-mn));const bull=d.close>=d.open;
+    ctx.strokeStyle=bull?'var(--acc, #FF5722)':'#ff4444';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x+bw/2,hY);ctx.lineTo(x+bw/2,lY);ctx.stroke();
+    ctx.fillStyle=bull?'var(--acc, #FF5722)':'#ff4444';ctx.fillRect(x,Math.min(oY,cY),bw,Math.max(1,Math.abs(cY-oY)));
+  });
+  const maxVol=Math.max(...data.map(d=>d.volume||0),1);
+  data.forEach((d,i)=>{const x=pad.l+i*(cw/data.length);const vh=(d.volume||0)/maxVol*40;ctx.fillStyle=d.close>=d.open?'rgba(221,255,0,.12)':'rgba(232,32,32,.12)';ctx.fillRect(x,H-pad.b-vh,bw,vh);});
+}
+
+async function loadTrades(mint){
+  const r=await fj('/api/dex/trades/'+mint+'?limit=30');
+  document.getElementById('tradeBody').innerHTML=(r.trades||[]).map(t=>{
+    const ago=Math.floor((Date.now()-t.timestamp)/1000);const ageStr=ago<60?ago+'s':ago<3600?Math.floor(ago/60)+'m':Math.floor(ago/3600)+'h';
+    return `<tr><td style="color:var(--t3)">${ageStr}</td><td><span style="color:${t.type==='buy'?'var(--acc, #FF5722)':'var(--red2)'}">●</span> ${t.type==='buy'?'Buy':'Sell'}</td><td>${parseFloat(t.amountIn).toFixed(2)}</td><td>${parseFloat(t.amountOut).toFixed(0)}</td><td>${parseFloat(t.price).toFixed(8)}</td><td style="color:var(--t3)">${(t.trader||'').slice(0,12)}</td></tr>`;
+  }).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--t3);padding:24px;font-family:Space Mono">No trades yet</td></tr>';
+}
+
+let dexWallet=null;
+async function connectDex(){if(window.solana?.isPhantom){try{const r=await window.solana.connect();dexWallet=r.publicKey.toString();}catch(e){}}else{dexWallet=prompt('Phantom not detected. Paste Solana address:');}if(dexWallet){const sw=document.getElementById('swWallet');sw.style.color='var(--acc, #FF5722)';sw.textContent='◎ Loading...';try{const w=await fetch(API+'/api/wallet/'+dexWallet,{headers:{'X-Session':SESSION}}).then(r=>r.json());sw.textContent='◎ '+parseFloat(w.balance).toFixed(2)+' S402';}catch(e){sw.textContent='◎ '+dexWallet.slice(0,6)+'…';}}}
+
+async function doSwap(type){
+  if(!dexWallet){connectDex();return;}
+  const amt=document.getElementById('swAmt').value;const msg=document.getElementById('swMsg');
+  if(!amt||!curToken){msg.textContent='Enter amount';return;}
+  msg.style.color='var(--t2)';msg.textContent=type==='buy'?'⏳ Processing buy...':'⏳ Processing sell...';
+  // Realistic delay
+  await new Promise(r=>setTimeout(r,800+Math.random()*1200));
+  try{const r=await(await fetch(API+'/api/dex/swap',{method:'POST',headers:{'Content-Type':'application/json','X-Session':SESSION},{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mint:curToken.mint||curToken.address,type,amount:amt,trader:dexWallet})})).json();
+  if(r.success){msg.style.color=type==='buy'?'var(--acc, #FF5722)':'var(--red2)';msg.textContent='✅ '+type.toUpperCase()+' @ ◎'+parseFloat(r.newPrice).toFixed(8);setTimeout(()=>showToken(curToken.mint||curToken.address),500);}
+  else{msg.style.color='var(--red2)';msg.textContent='❌ '+r.error;}}catch(e){msg.style.color='var(--red2)';msg.textContent='Error';}
+}
+
+function showList(){document.getElementById('list').style.display='block';document.getElementById('detail').style.display='none';curToken=null;loadTokens();}
+loadTokens();setInterval(()=>{if(!curToken)loadTokens();else showToken(curToken.mint||curToken.address);},6000);
+</script>
+</body>
+</html>
